@@ -42,7 +42,8 @@ const userSchema = new mongoose.Schema({
   },
   location: { type: "String" },
   createdBy: { type: "String" },
-  status: { type: Boolean, default: true },
+  status: { type: Boolean, default: false },
+  isActive: { type: Boolean, default: false },
   passwordResetToken: String,
   passwordResetExpires: Date,
   password: {

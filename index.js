@@ -18,6 +18,7 @@ const authroute = require("./routes/auth");
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json({ extended: false }));
+
 //Express Session
 app.use(session({
     secret: 'keyboard',

@@ -3,7 +3,8 @@ const _ = require("lodash");
 const bcrypt = require("bcryptjs");
 const express = require("express");
 const router = express.Router();
-const auth = require("../middleware/auth");
+const jwt = require("jsonwebtoken");
+// const auth = require("../middleware/auth");
 const { Account } = require("../models/accounts");
 const { LendRequest } = require("../models/lendRequest");
 const { LoanRequest } = require("../models/loanRequest");
@@ -44,7 +45,6 @@ const upload = multer({
 });
 
 
-
 router.post("/api/register", async (req, res) => {
 
     const hashPassword = async (password) => {
@@ -54,7 +54,6 @@ router.post("/api/register", async (req, res) => {
     };
 console.log(req.body);
     const password = await hashPassword(req.body.password);
-    console.log(password)
     console.log('nehdddd')
     console.log('neh')
     const firstname= req.body.firstname
@@ -84,29 +83,39 @@ console.log(req.body);
   });
 
 router.post("/api", async (req, res) => {
+  console.log('bdghd1')
+  console.log(req.body)
   const { error } = validate(req.body);
+  console.log('bdghd2')
   if (error)
     return res
       .status(400)
       .send({ error: true, message: error.details[0].message });
-
+      console.log('bdghd3')
   let user = await User.findOne({ email: req.body.email });
+  console.log('bdghd4')
+  console.log(user)
+
   if (!user)
     return res
       .status(400)
       .send({ error: true, message: "user does not exist" });
+      console.log('bdghd5')
 
   const validPassword = await bcrypt.compare(req.body.password, user.password);
-
+console.log('bdghd')
   if (!validPassword)
     return res.status(400).send({ error: true, message: "Invalid passsword" });
+  console.log('bdghd6')
   if(!user.status){
     return res
     .status(500)
     .send({ error: true, message: "This user is no longer active" });
   }
+  console.log('bdghd7')
 
   const token = user.generateAuthToken();
+  console.log('bdghd8')
   const result = {
     idToken: token,
     id: user._id,
@@ -115,7 +124,18 @@ router.post("/api", async (req, res) => {
     middlename: user.username,
     email: user.email
   };
-
+  // const secret= 'BL_VAULT'
+  // const token = jwt.sign(
+  //   { id: user._id,
+  //     firstName: user.firstName,
+  //     lastName: user.lastName,
+  //     middlename: user.username,
+  //     email: user.email }, // Payload
+  //     secret, // Secret key replace later
+  //   { expiresIn: '24h' } // Token expiration
+  // );
+  console.log('bdghd9')
+  console.log(result)
   return res
     .status(200)
     .send({ error: false, message: "success", data: result });
