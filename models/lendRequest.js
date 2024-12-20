@@ -8,7 +8,7 @@ const lendRequestSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 255,
   },
-  loaneeId: {
+  loanId: {
     type: String,
     minlength: 3,
     maxlength: 255,

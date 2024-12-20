@@ -64,8 +64,9 @@ router.get("/api/get_user", auth, async (req, res) => {
 
 // get all accounts of current user
 router.post("/api/get_accounts", auth, async (req, res) => {
-  const accounts = await Account.find({userId: req.body.uid});
+  const accounts = await Account.find({userId: req.user.id});
   let result = { status: "success", error: false, data: accounts };
+  console.log(accounts)
   res.send(result);
 });
 
@@ -97,8 +98,8 @@ router.post("/api/create_loan_request", auth, async (req, res) => {
   const request= new LoanRequest({
     loaneeId: req.user.id,
     amount:req.body.amount,
-    duration: req.body.duration,
-    loaneeAccId: req.body.accId,
+    start: req.body.start,
+    loaneeAccId: req.body.account,
     installments: req.body.installments
   })
   await request.save()
@@ -131,6 +132,13 @@ router.post("/api/get_loan_requests", auth , async (req, res) => {
   res.send(result);
 });
 
+router.post("/api/get_loan_request", auth , async (req, res) => {
+  const request = await LoanRequest.findOne({_id: req.body.id});
+  let result = { status: "success", error: false, data: request };
+
+  res.send(result);
+});
+
 // Search Loan Requests
 router.post("/api/search_loan_requests", auth , async (req, res) => {
   const request = await LoanRequest.findOne({_ID: req.body.id});
@@ -139,12 +147,21 @@ router.post("/api/search_loan_requests", auth , async (req, res) => {
   res.send(result);
 });
 
+
+// Search Loan Requests
+router.post("/api/get_all_loan_requests", auth , async (req, res) => {
+  const request = await LoanRequest.find({isActive: true});
+  let result = { status: "success", error: false, data: request };
+
+  res.send(result);
+});
+
 // create a lend request
 router.post("/api/create_lend_request", auth, async (req, res) => {
   const request= new LendRequest({
-    _id: req.body.id,
+    loanId: req.body.id,
     loanerId: req.user.id,
-    loanerAccId: req.user.id,
+    loanerAccId: req.body.accId,
     interest: req.body.interest,
   })
   await request.save()

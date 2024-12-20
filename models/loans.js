@@ -23,7 +23,7 @@ const loanSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 255,
   },
-  duration: {
+  start: {
     type: String,
     maxlength: 255,
   },
