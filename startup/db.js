@@ -3,7 +3,8 @@ const Fawn = require("fawn");
 const winston = require("winston");
 
 module.exports = function () {
-const db= 'mongodb+srv://kyriannkay:KEqBKyeusa6Yb2Qu@cluster0.3dbf7.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0'
+const db= 'mongodb://localhost:27017/blocklend'
+//mongodb+srv://kyriannkay:KEqBKyeusa6Yb2Qu@cluster0.3dbf7.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0'
   mongoose
     .connect(
       db,

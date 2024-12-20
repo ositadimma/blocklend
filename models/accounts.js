@@ -10,7 +10,6 @@ const accountSchema = new mongoose.Schema({
     maxlength: 255,
   }, 
   accountId: { type: String },
-  accountKey: { type: String },
   isActive: { type: Boolean, default: true },
   createdAt: {
     type: Date,

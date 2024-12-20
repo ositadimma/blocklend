@@ -4,7 +4,7 @@ const validateObjectId = require("../middleware/validateObjectId");
 
 //models
 const { Admin } = require("../models/admin");
-const { User, validateUser } = require("../models/user");
+const { User } = require("../models/users");
 const { Account } = require("../models/accounts");
 const { Token } = require("../models/token");
 const { PasswordResetToken } = require("../models/passwordResetToken");
@@ -30,6 +30,8 @@ const multer = require("multer");
 const { ObjectId } = require("mongodb");
 const { LoanRequest } = require("../models/loanRequest");
 const { LendRequest } = require("../models/lendRequest");
+const { Loan } = require("../models/loans");
+const { duration } = require("moment");
 
 const fileFilter = (req, file, cb) => {
   if (
@@ -77,12 +79,13 @@ router.post("/api/get_account", auth , async (req, res) => {
 
 // add crypto account to wallet
 router.post("/api/add_account", auth, async (req, res) => {
+  console.log('yh')
   const account= new Account({
     userId: req.user.id, 
     accountId: req.body.accId,
-    accountKey: req.body.accKey,
     currency: req.body.currency
   })
+  console.log('yh')
   await account.save()
   
   let result = { status: "success", error: false, data: account };
@@ -94,7 +97,9 @@ router.post("/api/create_loan_request", auth, async (req, res) => {
   const request= new LoanRequest({
     loaneeId: req.user.id,
     amount:req.body.amount,
+    duration: req.body.duration,
     loaneeAccId: req.body.accId,
+    installments: req.body.installments
   })
   await request.save()
   
@@ -103,8 +108,15 @@ router.post("/api/create_loan_request", auth, async (req, res) => {
 });
 
 // get loan Request
-router.post("/api/get_loan_request", auth , async (req, res) => {
-  const request = await LoanRequest.findOne({_id: req.body.id});
+router.post("/api/get_loan", auth , async (req, res) => {
+  const request = await Loan.findOne({loaneeId: req.user.id, isActive: true, status: true});
+  let result = { status: "success", error: false, data: request };
+
+  res.send(result);
+});
+
+router.post("/api/get_loans", auth , async (req, res) => {
+  const request = await Loan.find({loaneeId: req.user.id, status: true});
   let result = { status: "success", error: false, data: request };
 
   res.send(result);
@@ -113,7 +125,7 @@ router.post("/api/get_loan_request", auth , async (req, res) => {
 
 // Get Loan Requests
 router.post("/api/get_loan_requests", auth , async (req, res) => {
-  const request = await LoanRequest.find();
+  const request = await LoanRequest.find({loaneeId: req.user.id, isActive: true});
   let result = { status: "success", error: false, data: request };
 
   res.send(result);
@@ -130,9 +142,10 @@ router.post("/api/search_loan_requests", auth , async (req, res) => {
 // create a lend request
 router.post("/api/create_lend_request", auth, async (req, res) => {
   const request= new LendRequest({
+    _id: req.body.id,
     loanerId: req.user.id,
-    amount: req.body.amount,
-    loanerAccId: req.body.accId
+    loanerAccId: req.user.id,
+    interest: req.body.interest,
   })
   await request.save()
   
@@ -148,22 +161,21 @@ router.post("/api/get_lend_request", auth , async (req, res) => {
   res.send(result);
 });
 
-
 // create loan requests
 router.post("/api/get_lend_requests", auth , async (req, res) => {
-  const request = await LendRequest.find();
+  const request = await LendRequest.find({loanerId: req.user.id});
   let result = { status: "success", error: false, data: request };
 
   res.send(result);
 });
 
 // create Loan Requests
-router.post("/api/search_lend_requests", auth , async (req, res) => {
-  const request = await LendRequest.findOne({_ID: req.body.id});
-  let result = { status: "success", error: false, data: request };
+// router.post("/api/search_lend_requests", auth , async (req, res) => {
+//   const request = await LendRequest.findOne({_ID: req.body.id});
+//   let result = { status: "success", error: false, data: request };
 
-  res.send(result);
-});
+//   res.send(result);
+// });
 
 
 

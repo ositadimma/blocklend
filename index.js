@@ -1,4 +1,3 @@
-const winston = require("winston");
 const express = require("express");
 const http = require("http");
 const app = express();
@@ -9,6 +8,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 // const admin = require("./routes/admin");
 const authroute = require("./routes/auth");
+const mainroute = require("./routes/main");
 // const teachers = require("./routes/teachers");
 // const students = require("./routes/students");
 
@@ -42,11 +42,10 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Credentials', true);
   return next();
 });
-// app.use("/v1/parent", require("./routes/parents"));
-// app.use("/v1/admins", require("./routes/admin"));
+
+
 app.use("/v1/auth", require("./routes/auth"));
-// app.use("/v1/teacher", require("./routes/teachers"));
-// app.use("/v1/students", require("./routes/students"));
+app.use("/v1/main", require("./routes/main"));
 
 require("./startup/config")();
 require("./startup/validation")();
@@ -133,56 +132,3 @@ app.listen(myPort, (req, res) => {
 
 
 
-
-// app.use("/uploads", express.static("uploads"));
-
-// var Fingerprint = require("express-fingerprint");
-
-// dotenv.config({
-//   path: ".env",
-// });
-
-// const auth = require("./middleware/auth");
-
-// // const corsOptions ={
-// //   origin:'*', 
-// //   credentials:true,            //access-control-allow-credentials:true
-// //   optionSuccessStatus:200,
-// // }
-
-// //app.use(cors(corsOptions));
-
-// app.use((req, res, next) => {
-//   const origin = req.headers.origin;
-//   res.setHeader('Access-Control-Allow-Origin', '*');
-//   //res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8020');
-//   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-//   res.header('Access-Control-Allow-Credentials', true);
-//   return next();
-// });
-// require("./startup/logging")();
-// //require("./startup/routes")(app);
-// app.use("/v1/parent", parents);
-// app.use("/v1/admins", admin);
-// app.use("/v1/auth", authroute);
-// app.use("/v1/teacher", teachers);
-// app.use("/v1/students", students);
-// require("./startup/db")();
-
-// require("./startup/config")();
-// require("./startup/validation")();
-// require("./startup/prod")(app);
-// //app.use("/v1", routes);
-
-// app.get("/", /* auth,*/ (req, res) => {
-//   res.send("Awoof server is live...");
-// });
-
-// const serverr = http.createServer(app);
-// const port = process.env.PORT || 10000;
-// const server = serverr.listen(port, () =>
-//   winston.info(`Listening on port ${port}...`)
-// );
-
-// module.exports = server;

@@ -8,7 +8,9 @@ console.log('dhhd')
   if (!token) return res.status(401).send("Access denied! No token provided");
   console.log('dhhd2')
   try {
+    console.log(token)
     const decodedPayload = jwt.verify(token, process.env.jwtPrivateKey);
+    console.log(decodedPayload)
     console.log('dhhd3')
     req.user = decodedPayload;
     console.log('dhhd4')

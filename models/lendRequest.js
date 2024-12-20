@@ -8,9 +8,13 @@ const lendRequestSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 255,
   },
-  amount:{
+  loaneeId: {
     type: String,
     minlength: 3,
+    maxlength: 255,
+  },
+  amount:{
+    type: String,
     maxlength: 255,
   },
   loanerAccId: {
@@ -18,7 +22,13 @@ const lendRequestSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 255,
   },
+  interest: {
+    type: String,
+    maxlength: 255,
+  },
   isActive: { type: Boolean, default: true },
+  cancelled: { type: Boolean, default: false },
+  completed: { type: Boolean, default: false },
   createdAt: {
     type: Date,
     default: Date.now,
