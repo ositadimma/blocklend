@@ -161,8 +161,11 @@ router.post("/api/create_lend_request", auth, async (req, res) => {
   const request= new LendRequest({
     loanId: req.body.id,
     loanerId: req.user.id,
+    loaneeAccId: req.body.loaneeAccId,
     loanerAccId: req.body.accId,
     interest: req.body.interest,
+    start: req.body.start,
+    amount: req.body.amount
   })
   await request.save()
   

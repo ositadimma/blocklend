@@ -17,7 +17,16 @@ const lendRequestSchema = new mongoose.Schema({
     type: String,
     maxlength: 255,
   },
+  start:{
+    type: String,
+    maxlength: 255,
+  },
   loanerAccId: {
+    type: String,
+    minlength: 3,
+    maxlength: 255,
+  },
+  loaneeAccId: {
     type: String,
     minlength: 3,
     maxlength: 255,
