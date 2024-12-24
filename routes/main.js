@@ -32,6 +32,7 @@ const { LoanRequest } = require("../models/loanRequest");
 const { LendRequest } = require("../models/lendRequest");
 const { Loan } = require("../models/loans");
 const { duration } = require("moment");
+const { Installment } = require("../models/installments");
 
 const fileFilter = (req, file, cb) => {
   if (
@@ -151,6 +152,38 @@ router.post("/api/search_loan_requests", auth , async (req, res) => {
 // Search Loan Requests
 router.post("/api/get_all_loan_requests", auth , async (req, res) => {
   const request = await LoanRequest.find({isActive: true});
+  let result = { status: "success", error: false, data: request };
+
+  res.send(result);
+});
+
+
+
+// Search Loan Requests
+router.post("/api/loans/accept_offer", auth , async (req, res) => {
+  const request = await LendRequest.findOne({_id: req.body.id});
+  const loanRequest= await LoanRequest.findOne({_id: request.loanId});
+  const loan= new Loan({
+    loaneeId: req.user.id,
+    loanId: req.body.id,
+    loanerId: request.loanerId,
+    loaneeAccId: loanRequest.loaneeAccId,
+    loanerAccId: request.loanerAccId,
+    interest: request.interest,
+    start: request.start,
+    amount: loanRequest.amount,
+    totalPayable: loanRequest.amount*interest/100
+  })
+  
+  await loan.save()
+  for (let index = 0; index < loanRequest.installments; index++) {
+    const installment= new Installment({
+      loanId: request.loanId,
+      schedule: index+1,
+      amount: loan.totalPayable/loanRequest.installments,
+    })
+    await installment.save()
+  }
   let result = { status: "success", error: false, data: request };
 
   res.send(result);

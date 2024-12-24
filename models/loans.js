@@ -35,6 +35,14 @@ const loanSchema = new mongoose.Schema({
     type: String,
     maxlength: 255,
   },
+  totalPayable: {
+    type: String,
+    maxlength: 255,
+  },
+  amount: {
+    type: String,
+    maxlength: 255,
+  },
   isActive: { type: Boolean, default: true },
   createdAt: {
     type: Date,
