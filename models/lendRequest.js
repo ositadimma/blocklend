@@ -37,6 +37,7 @@ const lendRequestSchema = new mongoose.Schema({
   },
   isActive: { type: Boolean, default: true },
   cancelled: { type: Boolean, default: false },
+  accepted: { type: Boolean, default: false },
   completed: { type: Boolean, default: false },
   createdAt: {
     type: Date,

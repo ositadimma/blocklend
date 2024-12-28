@@ -19,6 +19,9 @@ const transactionSchema = new mongoose.Schema({
   amount: {
     type: Number
   },
+  hash: {
+    type: String
+  },
   isActive: { type: Boolean, default: true },
   createdAt: {
     type: Date,

@@ -25,6 +25,7 @@ const loanRequestSchema = new mongoose.Schema({
     type: String,
     maxlength: 255,
   },
+  completed: { type: Boolean, default: false },
   isActive: { type: Boolean, default: true },
   createdAt: {
     type: Date,

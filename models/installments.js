@@ -14,7 +14,8 @@ const installmentSchema = new mongoose.Schema({
     type: String
   },
   completed: {
-    type: String
+    type: String,
+    default: 'coming'
   },
   isActive: { type: Boolean, default: true },
   createdAt: {
